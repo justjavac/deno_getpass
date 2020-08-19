@@ -1,19 +1,18 @@
+import { encode, decode } from "https://deno.land/std/encoding/utf8.ts";
+
 const CTRLC = "\u0003";
 const CTRLD = "\u0004";
 const BACKSPACE = "\u007F";
 
-const decoder = new TextDecoder();
-const encoder = new TextEncoder();
-
 export default function getpass(prompt = "Password: "): string | null {
   Deno.setRaw(Deno.stdin.rid, true);
 
-  Deno.stdout.writeSync(encoder.encode(prompt));
+  Deno.stdout.writeSync(encode(prompt));
 
   let w: string = "";
 
   for (let thunk of Deno.iterSync(Deno.stdin)) {
-    const str = decoder.decode(thunk);
+    const str = decode(thunk);
     for (let i = 0; i < str.length; ++i) {
       var ch = str[i];
       switch (ch) {
