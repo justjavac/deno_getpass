@@ -1,7 +1,7 @@
 import { encode, decode } from "https://deno.land/std/encoding/utf8.ts";
 
 // https://en.wikipedia.org/wiki/ASCII#End_of_File/Stream
-const CTRLC = 0x03;  // ^C (ETX, End of Text)
+const CTRLC = 0x03; // ^C (ETX, End of Text)
 const CTRLD = 0x04; // ^D (EOT, End of Transmission)
 const BACKSPACE = 0x7F; // ^? (DEL, Delete)
 const LF = 0x0A; // \n, Line Feed
@@ -27,10 +27,10 @@ export default function getpass(prompt = "Password: "): string | undefined {
           cleanup();
           return;
         case BACKSPACE:
-          w.pop()
+          w.pop();
           break;
         default:
-          w.push(ch)
+          w.push(ch);
           break;
       }
     }
