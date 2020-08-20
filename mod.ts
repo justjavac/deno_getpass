@@ -1,43 +1,45 @@
 import { encode, decode } from "https://deno.land/std/encoding/utf8.ts";
 
-const CTRLC = "\u0003";
-const CTRLD = "\u0004";
-const BACKSPACE = "\u007F";
+// https://en.wikipedia.org/wiki/ASCII#End_of_File/Stream
+const CTRLC = 0x03;  // ^C (ETX, End of Text)
+const CTRLD = 0x04; // ^D (EOT, End of Transmission)
+const BACKSPACE = 0x7F; // ^? (DEL, Delete)
+const LF = 0x0A; // \n, Line Feed
+const CR = 0x0D; // \r, Carriage Return
 
 export default function getpass(prompt = "Password: "): string | null {
   Deno.setRaw(Deno.stdin.rid, true);
 
   Deno.stdout.writeSync(encode(prompt));
 
-  let w: string = "";
+  const w: number[] = [];
 
   for (let thunk of Deno.iterSync(Deno.stdin)) {
-    const str = decode(thunk);
-    for (let i = 0; i < str.length; ++i) {
-      var ch = str[i];
+    for (let i = 0; i < thunk.length; ++i) {
+      const ch = thunk[i];
       switch (ch) {
-        case "\r":
-        case "\n":
+        case LF:
+        case CR:
         case CTRLD:
           cleanup();
-          return w;
+          return decode(Uint8Array.from(w));
         case CTRLC:
           cleanup();
           throw new Error("Aborted");
         case BACKSPACE:
-          w = w.slice(0, w.length - 1);
+          w.pop()
           break;
         default:
-          w += ch;
+          w.push(ch)
           break;
       }
     }
   }
 
-  return w;
+  return decode(Uint8Array.from(w));
 }
 
 function cleanup() {
-  Deno.stdout.writeSync(Uint8Array.of(13, 10)); // \r\n
+  Deno.stdout.writeSync(Uint8Array.of(CR, LF)); // \r\n
   Deno.setRaw(Deno.stdin.rid, false);
 }
