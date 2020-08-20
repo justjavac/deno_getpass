@@ -7,7 +7,7 @@ const BACKSPACE = 0x7F; // ^? (DEL, Delete)
 const LF = 0x0A; // \n, Line Feed
 const CR = 0x0D; // \r, Carriage Return
 
-export default function getpass(prompt = "Password: "): string | null {
+export default function getpass(prompt = "Password: "): string | undefined {
   Deno.setRaw(Deno.stdin.rid, true);
 
   Deno.stdout.writeSync(encode(prompt));
@@ -25,7 +25,7 @@ export default function getpass(prompt = "Password: "): string | null {
           return decode(Uint8Array.from(w));
         case CTRLC:
           cleanup();
-          throw new Error("Aborted");
+          return;
         case BACKSPACE:
           w.pop()
           break;
@@ -35,8 +35,6 @@ export default function getpass(prompt = "Password: "): string | null {
       }
     }
   }
-
-  return decode(Uint8Array.from(w));
 }
 
 function cleanup() {

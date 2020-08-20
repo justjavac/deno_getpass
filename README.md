@@ -18,6 +18,8 @@ import getpass from "https://deno.land/x/getpass/mod.ts";
 const pw: string = getpass();
 ```
 
+**If enter <kbd>Ctrl + C</kbd>, will return `undefined`.**
+
 ## License
 
 [deno_getpass](https://github.com/justjavac/deno_getpass) is released under the MIT License. See the bundled [LICENSE](./LICENSE) file for details.
