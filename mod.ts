@@ -1,4 +1,4 @@
-import { encode, decode } from "https://deno.land/std/encoding/utf8.ts";
+import { iterateReaderSync } from "https://deno.land/std@0.130.0/streams/conversion.ts";
 
 // https://en.wikipedia.org/wiki/ASCII#End_of_File/Stream
 const CTRLC = 0x03; // ^C (ETX, End of Text)
@@ -10,11 +10,10 @@ const CR = 0x0D; // \r, Carriage Return
 export default function getpass(prompt = "Password: "): string | undefined {
   Deno.setRaw(Deno.stdin.rid, true);
 
-  Deno.stdout.writeSync(encode(prompt));
+  Deno.stdout.writeSync(new TextEncoder().encode(prompt));
 
   const w: number[] = [];
-
-  for (let thunk of Deno.iterSync(Deno.stdin)) {
+  for (const thunk of iterateReaderSync(Deno.stdin)) {
     for (let i = 0; i < thunk.length; ++i) {
       const ch = thunk[i];
       switch (ch) {
@@ -22,7 +21,7 @@ export default function getpass(prompt = "Password: "): string | undefined {
         case CR:
         case CTRLD:
           cleanup();
-          return decode(Uint8Array.from(w));
+          return new TextDecoder().decode(Uint8Array.from(w));
         case CTRLC:
           cleanup();
           return;
