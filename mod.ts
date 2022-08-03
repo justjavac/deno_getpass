@@ -1,4 +1,4 @@
-import { iterateReaderSync } from "https://deno.land/std@0.145.0/streams/conversion.ts";
+import { iterateReaderSync } from "https://deno.land/std@0.150.0/streams/conversion.ts";
 
 // https://en.wikipedia.org/wiki/ASCII#End_of_File/Stream
 const CTRLC = 0x03; // ^C (ETX, End of Text)
