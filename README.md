@@ -23,7 +23,6 @@ console.log("Your password is: %s", pw);
 
 **If enter <kbd>Ctrl + C</kbd>, will return `undefined`.**
 
-
 ## License
 
 [deno_getpass](https://github.com/justjavac/deno_getpass) is released under the
