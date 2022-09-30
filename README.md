@@ -2,6 +2,12 @@
 
 Safely read passwords in a console application on Linux, OSX and Windows.
 
+## Try it
+
+```bash
+deno run --unstable https://deno.land/x/getpass/example.ts
+```
+
 ## Permissions
 
 - `--unstable`
@@ -16,6 +22,7 @@ console.log("Your password is: %s", pw);
 ```
 
 **If enter <kbd>Ctrl + C</kbd>, will return `undefined`.**
+
 
 ## License
 
