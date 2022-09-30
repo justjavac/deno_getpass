@@ -8,7 +8,7 @@ const LF = 0x0A; // \n, Line Feed
 const CR = 0x0D; // \r, Carriage Return
 
 export default function getpass(prompt = "Password: "): string | undefined {
-  Deno.setRaw(Deno.stdin.rid, true);
+  Deno.stdin.setRaw(true);
 
   Deno.stdout.writeSync(new TextEncoder().encode(prompt));
 
@@ -38,5 +38,5 @@ export default function getpass(prompt = "Password: "): string | undefined {
 
 function cleanup() {
   Deno.stdout.writeSync(Uint8Array.of(CR, LF)); // \r\n
-  Deno.setRaw(Deno.stdin.rid, false);
+  Deno.stdin.setRaw(false);
 }
