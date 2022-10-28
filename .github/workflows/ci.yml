@@ -19,7 +19,7 @@ jobs:
         run: deno fmt --check
 
       - name: Type check
-        run: deno check --unstable mod.ts
+        run: deno check mod.ts
 
       - name: Lint
         run: deno lint
